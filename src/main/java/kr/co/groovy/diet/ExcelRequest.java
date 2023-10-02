@@ -11,10 +11,10 @@ import java.util.Map.Entry;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ExcelRequest {
-	String uploadPath;
+	String uploadSuin;
 
-	public ExcelRequest(String uploadPath) {
-		this.uploadPath = uploadPath;
+	public ExcelRequest(String uploadSuin) {
+		this.uploadSuin = uploadSuin;
 	}
 	
 	public ExcelRequest() {
@@ -28,9 +28,9 @@ public class ExcelRequest {
 	    String atchFileIdString = "";
 	    
 	    if ("".equals(storePath) || storePath == null) {
-	        storePathString = uploadPath;
+	        storePathString = uploadSuin;
 	    } else {
-	        storePathString = uploadPath + storePath;
+	        storePathString = uploadSuin + storePath;
 	    }
 	 
 	    if (!"".equals(atchFileId) || atchFileId != null) {

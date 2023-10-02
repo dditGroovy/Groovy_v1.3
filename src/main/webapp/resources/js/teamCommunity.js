@@ -278,17 +278,15 @@
                                          <div class="notice-title-wrap">
                                             <span class="noti-title">${item.sntncSj}</span>
                                             <span class="noti-date">${item.sntncWrtingDate}</span>
-                                        </div>
-                                        
-                                        <div class="btn-wrap">`;
+                                        </div>`;
                                     if (emplId == item.sntncWrtingEmplId) {
-                                    code += `
+                                    code += `<div class="btn-wrap">
                                                 <div class="edit-btn-wrap"><button type="button" class="notimodifyBtn editBtn btn btn-free-white">수정</button>
                                                 <button type="button" class="notideleteBtn btn btn-free-white editBtn">삭제</button></div>
-                                                `
+                                                <i class="icon i-arr-bt accordion-arrow"></i>`
+                                                   
                             }
-                        code += ` <i class="icon i-arr-bt accordion-arrow"></i>
-                                    </div>
+                        code += ` </div>
                                     </div></label>
                              <div class="accordion-body">
                                          <p class="noti-content input-l">${item.sntncCn}</p>
@@ -660,7 +658,6 @@
                     inputs.forEach(item => {
                         item.value = "";
                         modalClose();
-                        location.href = location.href;
                     })
                 },
                 error: function(xhr) {

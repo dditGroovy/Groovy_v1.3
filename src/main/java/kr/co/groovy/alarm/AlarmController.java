@@ -11,9 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/alarm")
@@ -49,18 +47,14 @@ public class AlarmController {
     }
 
     @GetMapping("/all")
-    @ResponseBody
-    public Map<String, Object> all(Principal principal) {
+    public String all(Principal principal, Model model) {
     	List<MemoVO> list = memoService.getMemo(principal.getName());
     	MemoVO memoVO = memoService.getFixMemo();
-        System.out.println("memoVO = " + memoVO);
-        System.out.println("list = " + list);
+		
+    	model.addAttribute("memoList", list);
+		model.addAttribute("fixMemo", memoVO);
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("list",list);
-        map.put("memoVO",memoVO);
-
-        return map;
+		return "tiles/serviceBar";
     }
 
     @GetMapping("/getAllAlarm")

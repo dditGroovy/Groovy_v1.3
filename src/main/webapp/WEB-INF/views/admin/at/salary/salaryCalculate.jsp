@@ -4,40 +4,45 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="CustomUser"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/admin/manageSalaryCalculate.css">
+    <style>
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .wrap ul {
+            display: flex;
+            gap: 10px
+        }
+
+        #myGrid {
+            width: 100%;
+            height: calc((360 / 1080) * 100vh);
+        }
+    </style>
     <script defer src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.js"></script>
     <div class="content-container">
-        <h1 class="dtsmtHeader tab-header font-md font-36">급여 정산</h1>
         <div class="wrap">
-            <div class="yearMonthDiv">
-                <div class="select-wrapper">
-                    <select name="sortOptions" id="yearSelect"
-                            class="stroke selectBox font-md font-14 color-font-md"></select>
-                </div>
-                <div class="searchDiv">
-                    <div class="serviceWrap">
-                        <i class="icon i-search"></i>
-                        <input type="text" oninput="onQuickFilterChanged()" class="input-free-white" id="quickFilter"
-                               placeholder="검색어를 입력하세요"/>
-                    </div>
-                </div>
-            </div>
-            <div id="monthDiv"></div>
-
         </div>
+        <br/>
+        <div class="serviceWrap">
+            <select name="sortOptions" id="yearSelect" class="stroke"></select>
+            <div id="monthDiv"></div>
+            <input type="text" oninput="onQuickFilterChanged()" id="quickFilter" placeholder="검색어를 입력하세요"/>
+        </div>
+        <br/><br/>
         <div class="cardWrap">
             <div class="card">
                 <div id="myGrid" class="ag-theme-alpine"></div>
             </div>
         </div>
-
     </div>
 </sec:authorize>
 <script>
     let selectedYear = null;
     let yearSelect = document.querySelector("#yearSelect");
 
-    getAllYear();
+    getAllYear(); //근무 해당 연도 가져오기
 
     yearSelect.addEventListener("change", function () {
         selectedYear = yearSelect.options[yearSelect.selectedIndex].value;
@@ -72,13 +77,12 @@
             contentType: "application/json;charset=utf-8",
             dataType: 'json',
             success: function (result) {
-                let nowDate = new Date();
                 let code = ``;
                 for (let i = 1; i <= 12; i++) {
-                    if (result.includes(i < 10 ? `0\${i}` : `\${i}` && nowDate.getDate() >= 15) || (i < nowDate.getMonth() + 1 && nowDate.getDate() >= 14)) {
-                        code += `<button type="button" class="btn btn-free-white btn-sm font-14 font-md color-font-md btn-batch" onclick="getSalaryByYearAndMonth(\${year}, this)">\${i}월</button>`;
+                    if (result.includes(i < 10 ? `0\${i}` : `\${i}`)) {
+                        code += `<button type="button" onclick="getSalaryByYearAndMonth(\${year}, this)" >\${i}월</button>`;
                     } else {
-                        code += `<button type="button" class="btn btn-free-white btn-sm font-14 font-md color-font-md btn-batch" disabled>\${i}월</button>`;
+                        code += `<button type="button" disabled>\${i}월</button>`;
                     }
                 }
                 monthDiv.innerHTML = code;
@@ -141,59 +145,23 @@
             field: "emplId",
             headerName: "사번",
             cellRenderer: linkCellRenderer
-            , cellStyle: {textAlign: "center"}
         },
-        {field: "emplNm", headerName: "이름", cellStyle: {textAlign: "center"}},
-        {field: "defaulWorkTime", headerName: "소정근무시간", cellStyle: {textAlign: "center"}},
-        {field: "realWorkTime", headerName: "근무시간", cellStyle: {textAlign: "center"}},
-        {field: "overWorkTime", headerName: "초과근무시간", cellStyle: {textAlign: "center"}},
-        {field: "totalWorkTime", headerName: "근무인정시간", cellStyle: {textAlign: "center"}},
-        {field: "salaryBslry", headerName: "기본급", cellStyle: {textAlign: "center"}, valueFormatter: formatNumber},
-        {
-            field: "salaryOvtimeAllwnc",
-            headerName: "초과근무수당",
-            cellStyle: {textAlign: "center"},
-            valueFormatter: formatNumber
-        },
-        {
-            field: "salaryDtsmtPymntTotamt",
-            headerName: "지급액계",
-            cellStyle: {textAlign: "center"},
-            valueFormatter: formatNumber
-        },
-        {field: "salaryDtsmtSisNp", headerName: "국민연금", cellStyle: {textAlign: "center"}, valueFormatter: formatNumber},
-        {field: "salaryDtsmtSisHi", headerName: "건강보험", cellStyle: {textAlign: "center"}, valueFormatter: formatNumber},
-        {field: "salaryDtsmtSisEi", headerName: "고용보험", cellStyle: {textAlign: "center"}, valueFormatter: formatNumber},
-        {
-            field: "salaryDtsmtSisWci",
-            headerName: "산재보험",
-            cellStyle: {textAlign: "center"},
-            valueFormatter: formatNumber
-        },
-        {
-            field: "salaryDtsmtIncmtax",
-            headerName: "소득세",
-            cellStyle: {textAlign: "center"},
-            valueFormatter: formatNumber
-        },
-        {
-            field: "salaryDtsmtLocalityIncmtax",
-            headerName: "지방소득세",
-            cellStyle: {textAlign: "center"},
-            valueFormatter: formatNumber
-        },
-        {
-            field: "salaryDtsmtDdcTotamt",
-            headerName: "공제액계",
-            cellStyle: {textAlign: "center"},
-            valueFormatter: formatNumber
-        },
-        {
-            field: "salaryDtsmtNetPay",
-            headerName: "실수령액",
-            cellStyle: {textAlign: "center"},
-            valueFormatter: formatNumber
-        },
+        {field: "emplNm", headerName: "이름"},
+        {field: "defaulWorkTime", headerName: "소정근무시간"},
+        {field: "realWorkTime", headerName: "근무시간"},
+        {field: "overWorkTime", headerName: "초과근무시간"},
+        {field: "totalWorkTime", headerName: "근무인정시간"},
+        {field: "salaryBslry", headerName: "기본급"},
+        {field: "salaryOvtimeAllwnc", headerName: "초과근무수당"},
+        {field: "salaryDtsmtPymntTotamt", headerName: "지급액계"},
+        {field: "salaryDtsmtSisNp", headerName: "국민연금"},
+        {field: "salaryDtsmtSisHi", headerName: "건강보험"},
+        {field: "salaryDtsmtSisEi", headerName: "고용보험"},
+        {field: "salaryDtsmtSisWci", headerName: "산재보험"},
+        {field: "salaryDtsmtIncmtax", headerName: "소득세"},
+        {field: "salaryDtsmtLocalityIncmtax", headerName: "지방소득세"},
+        {field: "salaryDtsmtDdcTotamt", headerName: "공제액계"},
+        {field: "salaryDtsmtNetPay", headerName: "실수령액"},
     ];
 
     const rowData = [];
@@ -238,9 +206,7 @@
         });
         return link;
     }
-
     function formatNumber(num) {
-        num = parseInt(num.value);
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 

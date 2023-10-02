@@ -134,11 +134,7 @@ public class JobService {
     }
 
     public List<JobVO> getJobByDateFilter(Map<String, Object> map) {
-        List<JobVO> jobVOList = mapper.getJobByDateFilter(map);
-        for (JobVO jobVO : jobVOList) {
-            jobVO.setCommonCodeDutyKind(DutyKind.getLabelByValue(jobVO.getCommonCodeDutyKind()));
-        }
-        return jobVOList;
+        return mapper.getJobByDateFilter(map);
     }
 
     public List<String> getRequestYear(String jobRequestEmplId) {

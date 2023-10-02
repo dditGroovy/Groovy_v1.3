@@ -114,9 +114,6 @@
     const gridOptions = {
         columnDefs: columnDefs,
         rowData: rowData,
-        onGridReady: function (event) {
-            event.api.sizeColumnsToFit();
-        },
     };
 
     /*module.exports = returnCarButtonRenderer;*/
