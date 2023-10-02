@@ -422,11 +422,11 @@ ul {
 }
 
 .btn-on {
-    background-color: var(--color-main);
-    border: 1px solid var(--color-stroke);
-    box-shadow: var(--clay-btn);
-    outline-color: var(--color-main);
-    color: white;
+    background-color: var(--color-main)!important;
+    border: 1px solid var(--color-stroke)!important;
+    box-shadow: var(--clay-btn)!important;
+    outline-color: var(--color-main)!important;
+    color: white!important;
 }
 
 .btn-on p, .btn-on span, .btn-on h3, .btn-on h4  {
